@@ -68,7 +68,7 @@ type T struct {
 
 func init() {
 	var err error
-	if jsonContentTypePattern, err = regexp.Compile("^application/(?:.*\\+)?json$"); err != nil {
+	if jsonContentTypePattern, err = regexp.Compile("^application/(?:.*\\+)?json(?:;.*)?$"); err != nil {
 		panic(err)
 	}
 }
