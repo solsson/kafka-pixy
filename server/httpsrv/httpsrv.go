@@ -24,6 +24,7 @@ import (
 	"github.com/mailgun/kafka-pixy/prettyfmt"
 	"github.com/mailgun/kafka-pixy/proxy"
 	"github.com/pkg/errors"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
@@ -67,7 +68,7 @@ type T struct {
 
 func init() {
 	var err error
-	if jsonContentTypePattern, err = regexp.Compile("^application/(?:.*\\+)?json$"); err != nil {
+	if jsonContentTypePattern, err = regexp.Compile("^application/(?:.*\\+)?json(?:;.*)?$"); err != nil {
 		panic(err)
 	}
 }
@@ -178,6 +179,7 @@ func (s *T) handleProduce(w http.ResponseWriter, r *http.Request) {
 	// Get the message body from the HTTP request.
 	var msg sarama.Encoder
 	if msg, err = s.readMsg(r); err != nil {
+		log.Infof("Rejecting HTTP message body for produce request from %s: err=(%s)", r.RemoteAddr, err)
 		s.respondWithJSON(w, http.StatusBadRequest, errorRs{err.Error()})
 		return
 	}
