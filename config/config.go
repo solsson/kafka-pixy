@@ -312,6 +312,8 @@ func (p *Proxy) SaramaClientCfg() *sarama.Config {
 	saramaCfg.Net.ReadTimeout = p.Net.ReadTimeout
 	saramaCfg.Net.WriteTimeout = p.Net.WriteTimeout
 
+	saramaCfg.Metadata.Retry.Max = 40
+
 	return saramaCfg
 }
 
